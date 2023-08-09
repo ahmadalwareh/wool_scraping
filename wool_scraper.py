@@ -31,25 +31,14 @@ class WebScraper(ScraperInterface):
             # Scrape product information and store it in a dictionary
             all_products.append(
                 {
-                    "name": soup.find(class_="maintitle-holder")
-                    .select("h1")[0]
-                    .text.strip(),
-                    "price": soup.find(class_="product-price")
-                    .select("span")[1]
-                    .text.strip(),
+                    "name": soup.find(class_="maintitle-holder").select("h1")[0].text.strip(),
+                    "price": soup.find(class_="product-price").select("span")[1].text.strip(),
                     "avalability": soup.find(
-                        id="ContentPlaceHolder1_upStockInfoDescription"
-                    )
-                    .select("span")[0]
-                    .text.strip(),
-                    "needle": soup.find(id="pdetailTableSpecs")
-                    .select("tr")[4]
-                    .text.strip()
-                    .replace("Nadelstärke", ""),
-                    "composition": soup.find(id="pdetailTableSpecs")
-                    .select("tr")[3]
-                    .text.strip()
-                    .replace("Zusammenstellung", ""),
+                        id="ContentPlaceHolder1_upStockInfoDescription").select("span")[0].text.strip(),
+                    "needle": soup.find(
+                        id="pdetailTableSpecs").select("tr")[4].text.strip().replace("Nadelstärke", ""),
+                    "composition": soup.find(
+                        id="pdetailTableSpecs").select("tr")[3].text.strip().replace("Zusammenstellung", ""),
                 }
             )
         return all_products
@@ -72,7 +61,8 @@ class WebScraper(ScraperInterface):
         for page in range(num2, num):
             req = requests.get(url + str(page))
             soup = BeautifulSoup(req.text, "html.parser")
-            titles = soup.find_all(class_="productlist-title gtm-product-impression")
+            titles = soup.find_all(
+                class_="productlist-title gtm-product-impression")
             for i in range(0, len(titles)):
                 all_links.append(
                     {
@@ -107,6 +97,7 @@ class FileHandler(FileHandlerInterface):
             dict_writer = csv.DictWriter(output_file, keys)
             dict_writer.writeheader()
             dict_writer.writerows(links)
+        print("Results saved to CSV file")
 
     def search_csv(self, filename, query):
         """
